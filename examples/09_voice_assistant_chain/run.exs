@@ -31,7 +31,7 @@ end
 
 IO.puts("== 1. VAD ==")
 {:ok, vad} = ArmAI.SileroVAD.load(vad_path)
-pcm = ArmAI.Audio.load_for_whisper(audio_in)
+pcm = InferAudio.Decoder.load_for_whisper(audio_in)
 segs = ArmAI.SileroVAD.detect(vad, pcm, threshold: 0.5)
 IO.puts("  → #{length(segs)} speech segments")
 
@@ -79,6 +79,6 @@ phonemes = ArmAI.Phonemizer.simple_english_phonemize(answer)
 phoneme_id_map = phonemes |> Enum.uniq() |> Enum.with_index() |> Enum.into(%{})
 ids = ArmAI.Phonemizer.to_phoneme_ids(phonemes, phoneme_id_map)
 samples = ArmAI.Piper.synthesize(piper, ids)
-:ok = ArmAI.Audio.write_wav(audio_out, samples, sample_rate: 22_050)
+:ok = InferAudio.Decoder.write_wav(audio_out, samples, sample_rate: 22_050)
 
 IO.puts("Done. Wrote #{audio_out} (#{Float.round(Nx.size(samples) / 22050, 2)} s)")

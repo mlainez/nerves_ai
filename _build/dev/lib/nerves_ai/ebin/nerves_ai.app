@@ -1,10 +1,11 @@
 {application,nerves_ai,
-             [{modules,['Elixir.NervesAI']},
+             [{modules,['Elixir.NervesAI','Elixir.NervesAI.Application']},
               {optional_applications,[rustler]},
               {applications,[kernel,stdlib,elixir,logger,rustler,
-                             rustler_precompiled,arm_ai,nx_arm,
-                             arm_nx_primitives,arm_llm,arm_vision,arm_audio,
-                             cpu_governor,model_hub,fwup_data_resize]},
-              {description,"Meta-package: the full edge-AI inference stack for Nerves devices on ARM CPUs"},
+                             rustler_precompiled,arm_ai,nx_arm,nx_primitives,
+                             llm,vision,audio,cpu_governor,model_hub,
+                             fwup_data_resize]},
+              {description,"Meta-package: full edge-AI inference stack for Nerves devices on ARM CPUs. Wires the generic libraries (`nx_primitives`, `llm`, `vision`, `audio`) to `arm_ai`'s NEON-tuned backends."},
               {registered,[]},
-              {vsn,"0.1.0"}]}.
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.NervesAI.Application',[]}}]}.

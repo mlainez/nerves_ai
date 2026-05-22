@@ -1,0 +1,10 @@
+{application,infer_audio,
+             [{modules,['Elixir.InferAudio','Elixir.InferAudio.Backend',
+                        'Elixir.InferAudio.Decoder','Elixir.InferAudio.Piper',
+                        'Elixir.InferAudio.SileroVAD']},
+              {optional_applications,[rustler]},
+              {applications,[kernel,stdlib,elixir,logger,nx,nx_primitives,
+                             infer_vision,rustler,rustler_precompiled]},
+              {description,"Generic Nx-tensor audio I/O + model wrappers (Silero VAD / Piper TTS) with a pluggable native backend (see `InferAudio.Backend`)."},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.

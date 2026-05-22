@@ -1,0 +1,12 @@
+{application,infer_llm,
+             [{modules,['Elixir.InferLLM','Elixir.InferLLM.Backend',
+                        'Elixir.InferLLM.Bench.TinyLM',
+                        'Elixir.InferLLM.KVCache',
+                        'Elixir.InferLLM.Primitives',
+                        'Elixir.InferLLM.Sampling','Elixir.InferLLM.Whisper']},
+              {optional_applications,[rustler]},
+              {applications,[kernel,stdlib,elixir,logger,nx,tokenizers,
+                             nx_primitives,rustler,rustler_precompiled]},
+              {description,"Generic Nx-tensor wrappers for quantized LLM + STT inference with a pluggable native backend (see `InferLLM.Backend`)."},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.

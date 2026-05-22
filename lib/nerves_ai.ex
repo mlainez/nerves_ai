@@ -2,32 +2,48 @@ defmodule NervesAI do
   @moduledoc """
   Edge-AI inference stack for Nerves devices on ARM CPUs.
 
-  This is a **meta-package** — depending on it pulls every layer
-  in one shot:
+  Meta-package — depending on it pulls every layer of the stack
+  and wires `arm_ai`'s NEON-tuned backends as the defaults for the
+  generic behaviour-driven libraries.
+
+  ## Stack layout
 
   | Package | What it ships |
   |---|---|
-  | `arm_ai` | The Rust NIF + Nx-free APIs (`ArmAI.LlamaCandle`, `ArmAI.Phonemizer`) |
+  | `arm_ai` | Rust NIF + Nx-free APIs (`ArmAI.LlamaCandle`, `ArmAI.Phonemizer`) + the `*Backend` impls for the generic libraries |
   | `nx_arm` | `Nx.Backend` + `Nx.Defn.Compiler` for the NEON kernels |
-  | `arm_nx_primitives` | `ArmNxPrimitives.FFT` / `Embeddings` / `Quantized` / `QuantizedConv` |
-  | `arm_llm` | `ArmLLM.WhisperCandle`, `KVCache`, `Sampling`, RMSNorm/RoPE Nx primitives |
-  | `arm_vision` | `ArmVision.YOLO`, `OCR`, `Face`, `Onnx`, `Preprocess`, `Detection`, `Image`, `StableDiffusion` |
-  | `arm_audio` | `ArmAudio.SileroVAD`, `Piper`, `Decoder` |
+  | `nx_primitives` | Generic API: `NxPrimitives.FFT` / `Embeddings` / `Quantized` / `QuantizedConv` (backend-driven; see `NxPrimitives.Backend`) |
+  | `infer_llm` | Generic API: `InferLLM.Whisper`, `InferLLM.KVCache`, `InferLLM.Sampling`, `InferLLM.Primitives` (backend-driven; see `InferLLM.Backend`) |
+  | `infer_vision` | Generic API: `InferVision.YOLO`, `OCR`, `Face`, `Onnx`, `Preprocess`, `Detection`, `Image`, `StableDiffusion` (see `InferVision.Backend`) |
+  | `infer_audio` | Generic API: `InferAudio.SileroVAD`, `InferAudio.Piper`, `InferAudio.Decoder` (see `InferAudio.Backend`) |
   | `cpu_governor` | `CpuGovernor.Performance` (scoped governor) + `CpuGovernor.Topology` |
   | `model_hub` | `ModelHub.ensure_all/0` — first-boot HF / URL downloads |
   | `fwup_data_resize` | `FwupDataResize.run/0` — first-boot F2FS partition grow |
 
-  ## When to use a smaller dep instead
+  ## Backend wiring
 
-  Each package above is independently published and useful. If
-  you don't need the whole stack, depend on just what you use —
-  saves compile time + binary size:
+  `NervesAI.Application` runs at boot and sets the default
+  backend for each generic library:
+
+  | Config key                              | Default value |
+  |---|---|
+  | `config :nx_primitives, :backend, …`    | `ArmAI.NxPrimitivesBackend` |
+  | `config :infer_llm, :backend, …`              | `ArmAI.LLMBackend` |
+  | `config :infer_vision, :backend, …`           | `ArmAI.VisionBackend` |
+  | `config :infer_audio, :backend, …`            | `ArmAI.AudioBackend` |
+
+  Defaults are only applied when the key is unset, so any
+  pre-existing config wins. To swap in a different backend
+  (CUDA, AVX, Metal), set the same config key to your impl.
+
+  ## When to use a smaller dep instead
 
   * **LLM-only, no Nx**: `{:arm_ai, "~> 0.1"}` — pure binary API
   * **Nx backend only** (Bumblebee / Axon / Defn on ARM):
     `{:nx_arm, "~> 0.2"}`
-  * **Vision-only**: `{:arm_vision, "~> 0.1"}` (also pulls
-    `nx_arm`, `arm_ai`, `arm_nx_primitives` transitively)
+  * **Vision-only**: `{:infer_vision, "~> 0.1"}` + `{:arm_ai, "~> 0.1"}`
+    — pulls `nx_arm`, `nx_primitives` transitively. You provide
+    the `InferVision.Backend` config.
 
   ## Quick start
 
