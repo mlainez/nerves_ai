@@ -1,0 +1,12 @@
+{application,arm_nx_primitives,
+             [{modules,['Elixir.ArmNxPrimitives',
+                        'Elixir.ArmNxPrimitives.Embeddings',
+                        'Elixir.ArmNxPrimitives.FFT',
+                        'Elixir.ArmNxPrimitives.Quantized',
+                        'Elixir.ArmNxPrimitives.QuantizedConv']},
+              {optional_applications,[rustler]},
+              {applications,[kernel,stdlib,elixir,logger,rustler,
+                             rustler_precompiled,nx,arm_ai,nx_arm]},
+              {description,"Cross-domain Nx-tensor primitives over arm_ai: FFT, embeddings (cosine sim / top-k), quantized matmul + conv"},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.

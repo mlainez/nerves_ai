@@ -1,0 +1,12 @@
+{application,arm_llm,
+             [{modules,['Elixir.ArmLLM','Elixir.ArmLLM.Bench.TinyLM',
+                        'Elixir.ArmLLM.KVCache','Elixir.ArmLLM.Primitives',
+                        'Elixir.ArmLLM.Sampling',
+                        'Elixir.ArmLLM.WhisperCandle']},
+              {optional_applications,[rustler]},
+              {applications,[kernel,stdlib,elixir,logger,rustler,
+                             rustler_precompiled,nx,arm_ai,nx_arm,
+                             arm_nx_primitives,tokenizers]},
+              {description,"Nx-tensor wrappers for quantized LLM + STT inference on ARM CPUs (Llama / Whisper / TinyLlama / SmolLM via Candle)"},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.
