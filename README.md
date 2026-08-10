@@ -6,6 +6,17 @@ Meta-package that pulls every layer of the stack and wires
 `arm_ai`'s NEON-tuned backends as defaults for the generic
 behaviour-driven libraries.
 
+## ⚠️ Very early work — built for a workshop, not for production
+
+This stack was written for the **Goatmire Elixir workshop** on running
+Nerves on Fairphone 3 hardware, and that's the context to read it in. It
+exists for tinkering and teaching.
+
+It is **not an actively maintained project** (yet). There are no
+stability guarantees, APIs will change without notice, and several parts
+are wired-but-unproven — the per-package READMEs say which. Treat it as
+something to hack on, not as a dependency to build a product on.
+
 ## What's in the stack
 
 ```

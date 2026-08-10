@@ -64,8 +64,8 @@ defmodule NervesAI.MixProject do
     [
       name: :nerves_ai,
       licenses: ["Apache-2.0"],
-      files: ~w(lib mix.exs README.md),
-      links: %{"GitHub" => "https://github.com/marclainez/nerves_ai"}
+      files: ~w(lib mix.exs README.md LICENSE),
+      links: %{"GitHub" => "https://github.com/mlainez/nerves_ai"}
     ]
   end
 end
