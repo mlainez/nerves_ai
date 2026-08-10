@@ -12,7 +12,7 @@ defmodule NervesAI.MixProject do
       deps: deps(),
       name: "NervesAI",
       description:
-        "Meta-package: full edge-AI inference stack for Nerves devices on ARM CPUs. Wires the generic libraries (`nx_primitives`, `llm`, `vision`, `audio`) to `arm_ai`'s NEON-tuned backends.",
+        "Meta-package: full edge-AI inference stack for Nerves devices on ARM CPUs. Wires the generic libraries (`nx_primitives`, `infer_llm`, `infer_vision`, `infer_audio`) to `arm_ai`'s NEON-tuned backends.",
       package: package(),
       docs: [main: "readme", extras: ["README.md"]]
     ]
@@ -37,8 +37,8 @@ defmodule NervesAI.MixProject do
   #   {:infer_vision, "~> 0.1"}         # YOLO / OCR / Face / ONNX wrappers
   #   {:infer_audio, "~> 0.1"}          # Silero VAD / Piper / audio I/O
   #   {:cpu_governor, "~> 0.1"}   # governor scope + topology
-  #   {:model_hub, "~> 0.1"}      # HF/URL model downloader
-  #   {:fwup_data_resize, "~> 0.1"}  # first-boot F2FS resize
+  #   {:nerves_model_hub, "~> 0.1"}      # HF/URL model downloader
+  #   {:nerves_data_resize, "~> 0.1"}  # first-boot F2FS resize
   defp deps do
     [
       # arm_ai builds its NIF via rustler_precompiled; rustler must
@@ -55,8 +55,8 @@ defmodule NervesAI.MixProject do
       {:infer_audio, path: "../infer_audio"},
       # Generic-Linux helpers used by the device-side stack
       {:cpu_governor, path: "../cpu_governor"},
-      {:model_hub, path: "../model_hub"},
-      {:fwup_data_resize, path: "../fwup_data_resize"}
+      {:nerves_model_hub, path: "../nerves_model_hub"},
+      {:nerves_data_resize, path: "../nerves_data_resize"}
     ]
   end
 

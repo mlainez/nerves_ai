@@ -40,7 +40,7 @@ defmodule NervesAI.Application do
   end
 
   defp run_storage_resize do
-    _ = FwupDataResize.run()
+    _ = NervesDataResize.run()
   rescue
     e -> Logger.warning("[nerves_ai] storage resize crashed: #{Exception.message(e)}")
   end
@@ -52,7 +52,7 @@ defmodule NervesAI.Application do
 
       models ->
         try do
-          case ModelHub.ensure_all(app: :nerves_ai, models: models) do
+          case NervesModelHub.ensure_all(app: :nerves_ai, models: models) do
             {:ok, paths} ->
               Logger.info("[nerves_ai] model hub: #{map_size(paths)} model(s) ready")
               {:ok, paths}

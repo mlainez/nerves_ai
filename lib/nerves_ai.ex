@@ -17,8 +17,8 @@ defmodule NervesAI do
   | `infer_vision` | Generic API: `InferVision.YOLO`, `OCR`, `Face`, `Onnx`, `Preprocess`, `Detection`, `Image`, `StableDiffusion` (see `InferVision.Backend`) |
   | `infer_audio` | Generic API: `InferAudio.SileroVAD`, `InferAudio.Piper`, `InferAudio.Decoder` (see `InferAudio.Backend`) |
   | `cpu_governor` | `CpuGovernor.Performance` (scoped governor) + `CpuGovernor.Topology` |
-  | `model_hub` | `ModelHub.ensure_all/0` — first-boot HF / URL downloads |
-  | `fwup_data_resize` | `FwupDataResize.run/0` — first-boot F2FS partition grow |
+  | `nerves_model_hub` | `NervesModelHub.ensure_all/0` — first-boot HF / URL downloads |
+  | `nerves_data_resize` | `NervesDataResize.run/0` — first-boot F2FS partition grow |
 
   ## Backend wiring
 
@@ -52,8 +52,8 @@ defmodule NervesAI do
       end
 
       Nx.global_default_backend(NxArm.Backend)
-      _ = ModelHub.ensure_all()           # first-boot downloads
-      _ = FwupDataResize.run()            # first-boot resize
+      _ = NervesModelHub.ensure_all()           # first-boot downloads
+      _ = NervesDataResize.run()            # first-boot resize
       CpuGovernor.Performance.with_performance(fn ->
         {:ok, model} = ArmAI.LlamaCandle.load("/root/models/tinyllama.gguf")
         ArmAI.LlamaCandle.generate(model, prompt_tokens: [1, 2724], max_new: 32)

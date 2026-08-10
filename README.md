@@ -28,20 +28,20 @@ nerves_ai (this meta-package — boots default backends)
 │
 ├── Generic Nx-tensor libraries (behaviour-driven; backend-pluggable)
 │   ├── nx_primitives      — FFT, embeddings, quantized helpers
-│   ├── llm                — Whisper STT, KV cache, sampling, LLM primitives
-│   ├── vision             — YOLO, OCR, Face, ONNX, vision preprocess
-│   └── audio              — Silero VAD, Piper TTS, audio decode/resample
+│   ├── infer_llm          — Whisper STT, KV cache, sampling, LLM primitives
+│   ├── infer_vision       — YOLO, OCR, Face, ONNX, vision preprocess
+│   └── infer_audio        — Silero VAD, Piper TTS, audio decode/resample
 │
 └── Generic-Linux helpers
     ├── cpu_governor       — scoped governor + big.LITTLE topology
-    ├── model_hub          — first-boot HF/URL model downloader
-    └── fwup_data_resize   — first-boot F2FS data-partition grow
+    ├── nerves_model_hub   — first-boot HF/URL model downloader
+    └── nerves_data_resize — first-boot F2FS data-partition grow
 ```
 
 ## How the backend pattern works
 
-Each of `nx_primitives`, `llm`, `vision`, `audio` defines a
-`<Pkg>.Backend` behaviour. `arm_ai` provides
+Each of `nx_primitives`, `infer_llm`, `infer_vision`, `infer_audio`
+defines a `<Pkg>.Backend` behaviour. `arm_ai` provides
 `ArmAI.NxPrimitivesBackend`, `ArmAI.LLMBackend`,
 `ArmAI.VisionBackend`, `ArmAI.AudioBackend` as the ARM-NEON
 implementations.
@@ -67,8 +67,8 @@ end
 Nx.global_default_backend(NxArm.Backend)
 
 # At boot:
-_ = ModelHub.ensure_all()      # download configured models
-_ = FwupDataResize.run()       # grow /root partition (once)
+_ = NervesModelHub.ensure_all()      # download configured models
+_ = NervesDataResize.run()       # grow /root partition (once)
 
 # Run an LLM burst at the perf governor
 CpuGovernor.Performance.with_performance(fn ->
@@ -94,8 +94,8 @@ instead:
 
 * `arm_ai` alone — NIF + LlamaCandle (no Nx)
 * `nx_arm` alone — Nx.Backend for Bumblebee/Axon
-* `vision` + `arm_ai` — YOLO/OCR/Face wrappers with the ARM backend
-* `llm` + `arm_ai` — Whisper + LLM primitives with the ARM backend
+* `infer_vision` + `arm_ai` — YOLO/OCR/Face wrappers with the ARM backend
+* `infer_llm` + `arm_ai` — Whisper + LLM primitives with the ARM backend
 
 See each package's mix.exs and README for its own dependency story.
 
