@@ -46,17 +46,17 @@ defmodule NervesAI.MixProject do
       {:rustler, "~> 0.36", optional: true},
       {:rustler_precompiled, "~> 0.8"},
       # Foundation
-      {:arm_ai, path: "../arm_ai"},
-      {:nx_arm, path: "../nx_arm"},
+      {:arm_ai, github: "mlainez/arm_ai"},
+      {:nx_arm, github: "mlainez/nx_arm"},
       # Generic Nx-tensor libraries (backend-pluggable)
-      {:nx_primitives, path: "../nx_primitives"},
-      {:infer_llm, path: "../infer_llm"},
-      {:infer_vision, path: "../infer_vision"},
-      {:infer_audio, path: "../infer_audio"},
+      {:nx_primitives, github: "mlainez/nx_primitives"},
+      {:infer_llm, github: "mlainez/infer_llm"},
+      {:infer_vision, github: "mlainez/infer_vision"},
+      {:infer_audio, github: "mlainez/infer_audio"},
       # Generic-Linux helpers used by the device-side stack
-      {:cpu_governor, path: "../cpu_governor"},
-      {:nerves_model_hub, path: "../nerves_model_hub"},
-      {:nerves_data_resize, path: "../nerves_data_resize"}
+      {:cpu_governor, github: "mlainez/cpu_governor"},
+      {:nerves_model_hub, github: "mlainez/nerves_model_hub"},
+      {:nerves_data_resize, github: "mlainez/nerves_data_resize"}
     ]
   end
 
