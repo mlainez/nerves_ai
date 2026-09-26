@@ -4,70 +4,37 @@ defmodule NervesAI.Application do
   use Application
   require Logger
 
-  @doc """
-  Boot tasks for the full Nerves AI stack:
-
-    1. Resize the F2FS data partition on first boot (idempotent —
-       no-op after that).
-    2. Download configured models via the model hub.
-    3. Wire `arm_ai`'s NEON-tuned backends as the defaults for the
-       generic libraries (`nx_primitives`, `infer_llm`, etc.).
-
-  Step 3 is the only one specific to *this* meta-package. Steps 1
-  and 2 live here because they're application-level (Nerves device)
-  orchestration, not anything the `arm_ai` NIF should be involved
-  in.
-
-  Users who want a different backend can override the `:backend`
-  config keys before this app starts; we only set defaults when
-  no value is configured.
-  """
+  # Boot tasks for the full Nerves AI stack:
+  #
+  #   1. Resize the F2FS data partition on first boot (idempotent,
+  #      disabled unless `config :nerves_data_resize, :config` names a
+  #      partition). Runs synchronously, before anything writes there.
+  #   2. Wire `arm_ai`'s backends as the defaults for the generic
+  #      libraries, unless a backend is already configured.
+  #   3. Download the models in `config :nerves_ai, :models` in a
+  #      supervised task that retries with backoff, so boot never waits
+  #      on the network.
   @impl true
   def start(_type, _args) do
-    case Application.get_env(:nerves_ai, :boot_mode, :normal) do
-      :recovery ->
-        Logger.warning(
-          "[nerves_ai] BOOT_MODE=:recovery — skipping resize, hub, and backend wiring"
-        )
+    children =
+      case Application.get_env(:nerves_ai, :boot_mode, :normal) do
+        :recovery ->
+          Logger.warning("[nerves_ai] boot_mode :recovery — skipping resize, backends, and models")
+          []
 
-      _ ->
-        run_storage_resize()
-        ensure_models()
-        wire_default_backends()
-    end
+        _ ->
+          run_storage_resize()
+          wire_default_backends()
+          model_children()
+      end
 
-    Supervisor.start_link([], strategy: :one_for_one, name: NervesAI.Supervisor)
+    Supervisor.start_link(children, strategy: :one_for_one, name: NervesAI.Supervisor)
   end
 
   defp run_storage_resize do
     _ = NervesDataResize.run()
   rescue
     e -> Logger.warning("[nerves_ai] storage resize crashed: #{Exception.message(e)}")
-  end
-
-  defp ensure_models do
-    case Application.get_env(:nerves_ai, :models, []) do
-      [] ->
-        :no_models_configured
-
-      models ->
-        try do
-          case NervesModelHub.ensure_all(app: :nerves_ai, models: models) do
-            {:ok, paths} ->
-              Logger.info("[nerves_ai] model hub: #{map_size(paths)} model(s) ready")
-              {:ok, paths}
-
-            {:error, errors} ->
-              for {id, reason} <- errors do
-                Logger.warning("[nerves_ai] model hub: #{id} failed: #{inspect(reason)}")
-              end
-
-              {:error, errors}
-          end
-        rescue
-          e -> Logger.warning("[nerves_ai] model hub crashed: #{Exception.message(e)}")
-        end
-    end
   end
 
   defp wire_default_backends do
@@ -80,6 +47,13 @@ defmodule NervesAI.Application do
   defp maybe_default(app, key, default) do
     if Application.get_env(app, key) == nil do
       Application.put_env(app, key, default)
+    end
+  end
+
+  defp model_children do
+    case Application.get_env(:nerves_ai, :models, []) do
+      [] -> []
+      models -> [Supervisor.child_spec({Task, fn -> NervesAI.Models.fetch(models) end}, restart: :transient)]
     end
   end
 end
