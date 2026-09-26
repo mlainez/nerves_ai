@@ -7,7 +7,7 @@ defmodule NervesAI.MixProject do
     [
       app: :nerves_ai,
       version: @version,
-      elixir: "~> 1.15",
+      elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       name: "NervesAI",
@@ -25,26 +25,11 @@ defmodule NervesAI.MixProject do
     ]
   end
 
-  # Pulls every layer + wires arm_ai as the default backend for each
-  # generic library at boot time.
-  #
-  # If you want a smaller surface, pick individual packages instead:
-  #
-  #   {:arm_ai, "~> 0.1"}         # NIF + LlamaCandle (no Nx)
-  #   {:nx_arm, "~> 0.2"}         # JUST the Nx.Backend
-  #   {:nx_primitives, "~> 0.1"}  # FFT / embeddings / quantized
-  #   {:infer_llm, "~> 0.1"}            # Whisper + LLM Nx wrappers
-  #   {:infer_vision, "~> 0.1"}         # YOLO / OCR / Face / ONNX wrappers
-  #   {:infer_audio, "~> 0.1"}          # Silero VAD / Piper / audio I/O
-  #   {:cpu_governor, "~> 0.1"}   # governor scope + topology
-  #   {:nerves_model_hub, "~> 0.1"}      # HF/URL model downloader
-  #   {:nerves_data_resize, "~> 0.1"}  # first-boot F2FS resize
+  # Pulls every layer and wires arm_ai as the default backend for each
+  # generic library at boot. None of these packages is on Hex yet; for a
+  # smaller surface, depend on individual repos from github.com/mlainez.
   defp deps do
     [
-      # arm_ai builds its NIF via rustler_precompiled; rustler must
-      # be visible at this package's compile time too.
-      {:rustler, "~> 0.36", optional: true},
-      {:rustler_precompiled, "~> 0.8"},
       # Foundation
       {:arm_ai, github: "mlainez/arm_ai"},
       {:nx_arm, github: "mlainez/nx_arm"},
