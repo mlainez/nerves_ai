@@ -1,5 +1,5 @@
 %{
-  "arm_ai": {:git, "https://github.com/mlainez/arm_ai.git", "18e706b15833ffccc475f68299c37428b44bfde0", []},
+  "arm_ai": {:git, "https://github.com/mlainez/arm_ai.git", "ac71751e17f6faaa98d17759802e7ffc8d961846", []},
   "castore": {:hex, :castore, "1.0.19", "6903cabdfd9d1af46454126e7c8385186659dd33ecfb74a885cae52221ad6109", [:mix], [], "hexpm", "3669e6cab13f54c2df26b3e6833745d647f35b6e30d8ddd5975df0d5c842ca98"},
   "complex": {:hex, :complex, "0.7.0", "695632ef9487517aa5d57edd1697801079d622414cb2e1a7cf538b1f9a50f205", [:mix], [], "hexpm", "0ee39c0803129f546e7f3f640da8f021c9e659402bf59da6f7f2c4848f068f8d"},
   "cpu_governor": {:git, "https://github.com/mlainez/cpu_governor.git", "ec2f19090b04a3febd1855396a833ffe4a001332", []},
@@ -7,7 +7,7 @@
   "infer_llm": {:git, "https://github.com/mlainez/infer_llm.git", "6e9e61d1c1cd60e5b3b26e606b7f7a09e8240312", []},
   "infer_vision": {:git, "https://github.com/mlainez/infer_vision.git", "20af05be4c429aa3098b9736ada578874176e8ba", []},
   "jason": {:hex, :jason, "1.4.5", "2e3a008590b0b8d7388c20293e9dcc9cf3e5d642fd2a114e4cbbb52e595d940a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0 or ~> 3.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "b0c823996102bcd0239b3c2444eb00409b72f6a140c1950bc8b457d836b30684"},
-  "nerves_data_resize": {:git, "https://github.com/mlainez/nerves_data_resize.git", "4dcc05fbe1c84c730aa4f634afb1b38e978bae0e", []},
+  "nerves_data_resize": {:git, "https://github.com/mlainez/nerves_data_resize.git", "6312687620df7c00ee967e73b056a2c5a4a759fc", []},
   "nerves_model_hub": {:git, "https://github.com/mlainez/nerves_model_hub.git", "91403011928509b95fe84dbeb1ce69bce29bcf60", []},
   "nx": {:hex, :nx, "0.12.0", "32bc205bab5486d73892132d17a11ea113e97427a29bb70606a544724b95e193", [:mix], [{:complex, "~> 0.7", [hex: :complex, repo: "hexpm", optional: false]}, {:telemetry, "~> 0.4.0 or ~> 1.0", [hex: :telemetry, repo: "hexpm", optional: false]}], "hexpm", "7d022a33ea3c900eb6e2e91b4e0793759459c886f482be61978004b5e4843b5e"},
   "nx_arm": {:git, "https://github.com/mlainez/nx_arm.git", "2a065820a693606515a6dc503bcb759b6dcf97f9", []},
